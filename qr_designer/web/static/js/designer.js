@@ -211,10 +211,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Export
   document.getElementById("export-btn").addEventListener("click", () => exportQR());
 
-  // Export / Import settings
+  // Export / Import settings (both designer + layout)
   document.getElementById("export-settings-btn").addEventListener("click", () => {
-    const formState = buildFormState();
-    const blob = new Blob([JSON.stringify(formState, null, 2)], { type: "application/json" });
+    const combined = {
+      designer: buildFormState(),
+      layout: JSON.parse(localStorage.getItem("qr_layout_form_state") || "{}"),
+    };
+    const blob = new Blob([JSON.stringify(combined, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -231,8 +234,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
-        const formState = JSON.parse(evt.target.result);
-        applyFormState(formState);
+        const data = JSON.parse(evt.target.result);
+        if (data.designer) {
+          applyFormState(data.designer);
+        } else if (!data.layout) {
+          applyFormState(data);
+        }
+        if (data.layout) {
+          localStorage.setItem("qr_layout_form_state", JSON.stringify(data.layout));
+        }
         schedulePreview();
       } catch (err) {
         console.error("Failed to import settings:", err);

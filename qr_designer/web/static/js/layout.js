@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Custom page size toggle
   const pageSizeSelect = document.getElementById("layout-page-size");
   pageSizeSelect.addEventListener("change", () => {
     document.getElementById("custom-page-size").classList.toggle("hidden", pageSizeSelect.value !== "custom");
+    saveLayoutState();
   });
 
   function buildStyleConfig() {
@@ -53,6 +53,103 @@ document.addEventListener("DOMContentLoaded", () => {
     return config;
   }
 
+  function buildLayoutFormState() {
+    const formState = {};
+    document.querySelectorAll("input, select, textarea").forEach((el) => {
+      if (!el.id) return;
+      if (el.type === "checkbox") {
+        formState[el.id] = el.checked;
+      } else if (el.type === "file") {
+        return;
+      } else {
+        formState[el.id] = el.value;
+      }
+    });
+    return formState;
+  }
+
+  function applyLayoutFormState(formState) {
+    Object.entries(formState).forEach(([id, value]) => {
+      if (id.startsWith("_")) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === "checkbox") {
+        el.checked = value;
+      } else if (el.type !== "file") {
+        el.value = value;
+      }
+    });
+    document.getElementById("custom-page-size").classList.toggle("hidden", pageSizeSelect.value !== "custom");
+  }
+
+  function saveLayoutState() {
+    localStorage.setItem("qr_layout_form_state", JSON.stringify(buildLayoutFormState()));
+  }
+
+  function restoreLayoutState() {
+    const saved = localStorage.getItem("qr_layout_form_state");
+    if (!saved) return false;
+    try {
+      applyLayoutFormState(JSON.parse(saved));
+      return true;
+    } catch (e) {
+      console.error("Failed to restore layout state:", e);
+      return false;
+    }
+  }
+
+  // Auto-save on any input change
+  document.querySelectorAll("input, select, textarea").forEach((el) => {
+    if (el.type === "file") return;
+    el.addEventListener("input", () => saveLayoutState());
+    el.addEventListener("change", () => saveLayoutState());
+  });
+
+  // Export settings (both designer + layout)
+  document.getElementById("export-settings-btn").addEventListener("click", () => {
+    const combined = {
+      designer: JSON.parse(localStorage.getItem("qr_designer_form_state") || "{}"),
+      layout: buildLayoutFormState(),
+    };
+    const blob = new Blob([JSON.stringify(combined, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "qr-design-settings.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // Import settings (both designer + layout)
+  document.getElementById("import-settings").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const data = JSON.parse(evt.target.result);
+        if (data.layout) {
+          applyLayoutFormState(data.layout);
+          saveLayoutState();
+        } else if (!data.designer) {
+          applyLayoutFormState(data);
+          saveLayoutState();
+        }
+        if (data.designer) {
+          localStorage.setItem("qr_designer_form_state", JSON.stringify(data.designer));
+          localStorage.setItem("qr_designer_style", "");
+        }
+      } catch (err) {
+        console.error("Failed to import settings:", err);
+        alert("Invalid settings file.");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+
   const hasDesign = !!localStorage.getItem("qr_designer_style");
   const placeholder = document.getElementById("layout-placeholder");
   if (hasDesign) {
@@ -91,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Export
+  // Export PDF
   document.getElementById("layout-export-btn").addEventListener("click", async () => {
     try {
       const res = await fetch("/api/layout/export", {
@@ -115,4 +212,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Layout export failed:", e);
     }
   });
+
+  restoreLayoutState();
 });
