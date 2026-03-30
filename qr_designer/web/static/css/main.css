@@ -282,6 +282,17 @@ input[type="checkbox"] {
     opacity: 0.9;
 }
 
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+
+.btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
 .btn-sm {
     padding: 6px 14px;
     font-size: 13px;

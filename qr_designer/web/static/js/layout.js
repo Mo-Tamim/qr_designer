@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function buildStyleConfig() {
-    const saved = sessionStorage.getItem("qr_designer_style");
+    const saved = localStorage.getItem("qr_designer_style");
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return config;
   }
 
-  const hasDesign = !!sessionStorage.getItem("qr_designer_style");
+  const hasDesign = !!localStorage.getItem("qr_designer_style");
   const placeholder = document.getElementById("layout-placeholder");
   if (hasDesign) {
     placeholder.innerHTML = 'Using your design from the <a href="/">Designer</a> page.<br>Click "Preview Layout" to generate a preview.';
