@@ -12,9 +12,21 @@ from .color import BackgroundSpec, ColorSpec
 class LogoConfig(BaseModel):
     image_path: str = ""
     size_ratio: float = Field(0.2, ge=0.05, le=0.35)
-    padding: int = Field(5, ge=0)
+    padding: int = Field(5, ge=0, le=40)
+    margin: int = Field(0, ge=0, le=20)
     frame_shape: str = "none"  # "none", "circle", "square", "rounded"
     frame_color: str = "#FFFFFF"
+    logo_shape: str = "original"  # "original", "circle", "rounded_square"
+    border_width: int = Field(0, ge=0, le=10)
+    border_color: str = "#000000"
+    shadow: bool = False
+    shadow_color: str = "#00000066"
+    shadow_offset: int = Field(3, ge=0, le=10)
+    shadow_blur: int = Field(8, ge=0, le=20)
+    bg_opacity: int = Field(100, ge=0, le=100)
+    text: str = ""
+    text_color: str = "#000000"
+    text_font_size: int = Field(14, ge=8, le=32)
 
 
 class QRStyleConfig(BaseModel):

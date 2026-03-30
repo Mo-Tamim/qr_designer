@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Logo size / padding display
+  // Logo size / padding / margin display
   const logoSize = document.getElementById("logo-size");
   logoSize.addEventListener("input", () => {
     document.getElementById("logo-size-val").textContent = logoSize.value + "%";
@@ -71,6 +71,68 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoPadding = document.getElementById("logo-padding");
   logoPadding.addEventListener("input", () => {
     document.getElementById("logo-padding-val").textContent = logoPadding.value + "px";
+    schedulePreview();
+  });
+
+  const logoMargin = document.getElementById("logo-margin");
+  logoMargin.addEventListener("input", () => {
+    document.getElementById("logo-margin-val").textContent = logoMargin.value + "px";
+    schedulePreview();
+  });
+
+  // Frame shape toggle: show/hide frame-dependent controls
+  const logoFrame = document.getElementById("logo-frame");
+  logoFrame.addEventListener("change", () => {
+    const hasFrame = logoFrame.value !== "none";
+    document.getElementById("logo-frame-controls").classList.toggle("hidden", !hasFrame);
+    schedulePreview();
+  });
+
+  // Border width toggle: show/hide border color
+  const logoBorderWidth = document.getElementById("logo-border-width");
+  logoBorderWidth.addEventListener("input", () => {
+    document.getElementById("logo-border-width-val").textContent = logoBorderWidth.value + "px";
+    document.getElementById("logo-border-color-group").classList.toggle("hidden", logoBorderWidth.value === "0");
+    schedulePreview();
+  });
+
+  // Background opacity display
+  const logoBgOpacity = document.getElementById("logo-bg-opacity");
+  logoBgOpacity.addEventListener("input", () => {
+    document.getElementById("logo-bg-opacity-val").textContent = logoBgOpacity.value + "%";
+    schedulePreview();
+  });
+
+  // Shadow toggle
+  const logoShadow = document.getElementById("logo-shadow");
+  logoShadow.addEventListener("change", () => {
+    document.getElementById("logo-shadow-controls").classList.toggle("hidden", !logoShadow.checked);
+    schedulePreview();
+  });
+
+  // Shadow controls display
+  const logoShadowOffset = document.getElementById("logo-shadow-offset");
+  logoShadowOffset.addEventListener("input", () => {
+    document.getElementById("logo-shadow-offset-val").textContent = logoShadowOffset.value + "px";
+    schedulePreview();
+  });
+
+  const logoShadowBlur = document.getElementById("logo-shadow-blur");
+  logoShadowBlur.addEventListener("input", () => {
+    document.getElementById("logo-shadow-blur-val").textContent = logoShadowBlur.value + "px";
+    schedulePreview();
+  });
+
+  // Text label toggle
+  const logoText = document.getElementById("logo-text");
+  logoText.addEventListener("input", () => {
+    document.getElementById("logo-text-controls").classList.toggle("hidden", !logoText.value.trim());
+    schedulePreview();
+  });
+
+  const logoTextSize = document.getElementById("logo-text-size");
+  logoTextSize.addEventListener("input", () => {
+    document.getElementById("logo-text-size-val").textContent = logoTextSize.value + "px";
     schedulePreview();
   });
 
@@ -183,8 +245,20 @@ document.addEventListener("DOMContentLoaded", () => {
         image_path: logoPath,
         size_ratio: parseInt(logoSize.value) / 100,
         padding: parseInt(logoPadding.value),
-        frame_shape: document.getElementById("logo-frame").value,
+        margin: parseInt(logoMargin.value),
+        frame_shape: logoFrame.value,
         frame_color: document.getElementById("logo-frame-color").value,
+        logo_shape: document.getElementById("logo-shape").value,
+        border_width: parseInt(logoBorderWidth.value),
+        border_color: document.getElementById("logo-border-color").value,
+        shadow: logoShadow.checked,
+        shadow_color: document.getElementById("logo-shadow-color").value + "66",
+        shadow_offset: parseInt(logoShadowOffset.value),
+        shadow_blur: parseInt(logoShadowBlur.value),
+        bg_opacity: parseInt(logoBgOpacity.value),
+        text: logoText.value,
+        text_color: document.getElementById("logo-text-color").value,
+        text_font_size: parseInt(logoTextSize.value),
       };
     }
 

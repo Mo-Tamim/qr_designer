@@ -109,6 +109,17 @@ body {
     margin-top: 4px;
 }
 
+.tab-panel .section-title {
+    padding: 10px 0 4px;
+    margin-top: 8px;
+    border-top: 1px solid var(--border);
+}
+
+.tab-panel .section-title:first-of-type {
+    border-top: none;
+    margin-top: 0;
+}
+
 /* Tabs */
 .tabs {
     display: flex;

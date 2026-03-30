@@ -252,6 +252,8 @@
                 <input type="file" id="logo-upload" accept="image/*">
             </div>
             <div id="logo-controls" class="hidden">
+
+                <h4 class="section-title">Size &amp; Position</h4>
                 <div class="form-group">
                     <label for="logo-size">Size</label>
                     <input type="range" id="logo-size" min="5" max="35" value="20">
@@ -259,9 +261,26 @@
                 </div>
                 <div class="form-group">
                     <label for="logo-padding">Padding</label>
-                    <input type="range" id="logo-padding" min="0" max="20" value="5">
+                    <input type="range" id="logo-padding" min="0" max="40" value="5">
                     <span id="logo-padding-val">5px</span>
                 </div>
+                <div class="form-group">
+                    <label for="logo-margin">Clear Zone Margin</label>
+                    <input type="range" id="logo-margin" min="0" max="20" value="0">
+                    <span id="logo-margin-val">0px</span>
+                </div>
+
+                <h4 class="section-title">Logo Shape</h4>
+                <div class="form-group">
+                    <label for="logo-shape">Crop Shape</label>
+                    <select id="logo-shape">
+                        <option value="original">Original</option>
+                        <option value="circle">Circle</option>
+                        <option value="rounded_square">Rounded Square</option>
+                    </select>
+                </div>
+
+                <h4 class="section-title">Frame</h4>
                 <div class="form-group">
                     <label for="logo-frame">Frame Shape</label>
                     <select id="logo-frame">
@@ -271,11 +290,68 @@
                         <option value="circle">Circle</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="logo-frame-color">Frame Color</label>
-                    <input type="color" id="logo-frame-color" value="#FFFFFF">
+                <div id="logo-frame-controls" class="hidden">
+                    <div class="form-group">
+                        <label for="logo-frame-color">Fill Color</label>
+                        <input type="color" id="logo-frame-color" value="#FFFFFF">
+                    </div>
+                    <div class="form-group">
+                        <label for="logo-bg-opacity">Background Opacity</label>
+                        <input type="range" id="logo-bg-opacity" min="0" max="100" value="100">
+                        <span id="logo-bg-opacity-val">100%</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="logo-border-width">Border Width</label>
+                        <input type="range" id="logo-border-width" min="0" max="10" value="0">
+                        <span id="logo-border-width-val">0px</span>
+                    </div>
+                    <div id="logo-border-color-group" class="form-group hidden">
+                        <label for="logo-border-color">Border Color</label>
+                        <input type="color" id="logo-border-color" value="#000000">
+                    </div>
                 </div>
-                <button id="remove-logo" class="btn btn-sm btn-danger">Remove Logo</button>
+
+                <h4 class="section-title">Effects</h4>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="logo-shadow"> Drop Shadow
+                    </label>
+                </div>
+                <div id="logo-shadow-controls" class="hidden">
+                    <div class="form-group">
+                        <label for="logo-shadow-color">Shadow Color</label>
+                        <input type="color" id="logo-shadow-color" value="#000000">
+                    </div>
+                    <div class="form-group">
+                        <label for="logo-shadow-offset">Shadow Offset</label>
+                        <input type="range" id="logo-shadow-offset" min="0" max="10" value="3">
+                        <span id="logo-shadow-offset-val">3px</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="logo-shadow-blur">Shadow Blur</label>
+                        <input type="range" id="logo-shadow-blur" min="0" max="20" value="8">
+                        <span id="logo-shadow-blur-val">8px</span>
+                    </div>
+                </div>
+
+                <h4 class="section-title">Text Label</h4>
+                <div class="form-group">
+                    <label for="logo-text">Text</label>
+                    <input type="text" id="logo-text" placeholder="e.g. SCAN ME" value="">
+                </div>
+                <div id="logo-text-controls" class="hidden">
+                    <div class="form-group">
+                        <label for="logo-text-color">Text Color</label>
+                        <input type="color" id="logo-text-color" value="#000000">
+                    </div>
+                    <div class="form-group">
+                        <label for="logo-text-size">Font Size</label>
+                        <input type="range" id="logo-text-size" min="8" max="32" value="14">
+                        <span id="logo-text-size-val">14px</span>
+                    </div>
+                </div>
+
+                <button id="remove-logo" class="btn btn-sm btn-danger" style="margin-top: 12px;">Remove Logo</button>
             </div>
         </div>
 

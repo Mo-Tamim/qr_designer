@@ -55,8 +55,20 @@ def _generate_qr_image(style: QRStyleConfig, size_override: int | None = None):
             style.logo.image_path,
             size_ratio=style.logo.size_ratio,
             padding=style.logo.padding,
+            margin=style.logo.margin,
             frame_shape=style.logo.frame_shape,
             frame_color=style.logo.frame_color,
+            logo_shape=style.logo.logo_shape,
+            border_width=style.logo.border_width,
+            border_color=style.logo.border_color,
+            shadow=style.logo.shadow,
+            shadow_color=style.logo.shadow_color,
+            shadow_offset=style.logo.shadow_offset,
+            shadow_blur=style.logo.shadow_blur,
+            bg_opacity=style.logo.bg_opacity,
+            text=style.logo.text,
+            text_color=style.logo.text_color,
+            text_font_size=style.logo.text_font_size,
         )
 
     return img, matrix, classified
