@@ -211,7 +211,84 @@ document.addEventListener("DOMContentLoaded", () => {
   // Export
   document.getElementById("export-btn").addEventListener("click", () => exportQR());
 
+  function saveDesignState() {
+    const formState = {};
+    document.querySelectorAll("input, select, textarea").forEach((el) => {
+      if (!el.id) return;
+      if (el.type === "checkbox") {
+        formState[el.id] = el.checked;
+      } else if (el.type === "file") {
+        return;
+      } else {
+        formState[el.id] = el.value;
+      }
+    });
+    formState._logoPath = logoPath;
+    sessionStorage.setItem("qr_designer_form_state", JSON.stringify(formState));
+    sessionStorage.setItem("qr_designer_style", JSON.stringify(buildStyleConfig()));
+  }
+
+  function restoreDesignState() {
+    const saved = sessionStorage.getItem("qr_designer_form_state");
+    if (!saved) return false;
+
+    try {
+      const formState = JSON.parse(saved);
+
+      Object.entries(formState).forEach(([id, value]) => {
+        if (id.startsWith("_")) return;
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === "checkbox") {
+          el.checked = value;
+        } else if (el.type !== "file") {
+          el.value = value;
+        }
+      });
+
+      if (formState._logoPath) {
+        logoPath = formState._logoPath;
+        document.getElementById("logo-controls").classList.remove("hidden");
+      }
+
+      document.querySelectorAll(".content-section").forEach((s) => s.classList.add("hidden"));
+      const activeSection = document.querySelector(`.content-section[data-type="${contentType.value}"]`);
+      if (activeSection) activeSection.classList.remove("hidden");
+
+      document.getElementById("gradient-controls").classList.toggle("hidden", !useGradient.checked);
+      document.getElementById("gradient-angle-val").textContent = gradAngle.value + "°";
+
+      document.getElementById("bg-solid-controls").classList.toggle("hidden", bgType.value !== "solid");
+      document.getElementById("bg-gradient-controls").classList.toggle("hidden", bgType.value !== "gradient");
+
+      if (logoPath) {
+        document.getElementById("logo-size-val").textContent = logoSize.value + "%";
+        document.getElementById("logo-padding-val").textContent = logoPadding.value + "px";
+        document.getElementById("logo-margin-val").textContent = logoMargin.value + "px";
+
+        const hasFrame = logoFrame.value !== "none";
+        document.getElementById("logo-frame-controls").classList.toggle("hidden", !hasFrame);
+        document.getElementById("logo-border-width-val").textContent = logoBorderWidth.value + "px";
+        document.getElementById("logo-border-color-group").classList.toggle("hidden", logoBorderWidth.value === "0");
+        document.getElementById("logo-bg-opacity-val").textContent = logoBgOpacity.value + "%";
+
+        document.getElementById("logo-shadow-controls").classList.toggle("hidden", !logoShadow.checked);
+        document.getElementById("logo-shadow-offset-val").textContent = logoShadowOffset.value + "px";
+        document.getElementById("logo-shadow-blur-val").textContent = logoShadowBlur.value + "px";
+
+        document.getElementById("logo-text-controls").classList.toggle("hidden", !logoText.value.trim());
+        document.getElementById("logo-text-size-val").textContent = logoTextSize.value + "px";
+      }
+
+      return true;
+    } catch (e) {
+      console.error("Failed to restore design state:", e);
+      return false;
+    }
+  }
+
   function schedulePreview() {
+    saveDesignState();
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(generatePreview, 300);
   }
@@ -382,6 +459,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Initial preview
+  restoreDesignState();
   generatePreview();
 });

@@ -6,6 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function buildStyleConfig() {
+    const saved = sessionStorage.getItem("qr_designer_style");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse saved style:", e);
+      }
+    }
     return {
       content_type: "url",
       content_data: { url: "https://example.com" },
@@ -43,6 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     return config;
+  }
+
+  const hasDesign = !!sessionStorage.getItem("qr_designer_style");
+  const placeholder = document.getElementById("layout-placeholder");
+  if (hasDesign) {
+    placeholder.innerHTML = 'Using your design from the <a href="/">Designer</a> page.<br>Click "Preview Layout" to generate a preview.';
   }
 
   // Preview
