@@ -100,18 +100,33 @@
             </div>
         </div>
 
+        <h4 class="section-title">Layout Diagram</h4>
+        <div class="layout-diagram-wrap">
+            <svg id="layout-diagram" viewBox="0 0 260 340" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+
         <h4 class="section-title">Text Labels</h4>
-        <div class="form-group">
-            <label for="top-text">Top Text</label>
-            <input type="text" id="top-text" placeholder='e.g. "Scan to Win"'>
-        </div>
-        <div class="form-group">
-            <label for="bottom-text">Bottom Text</label>
-            <input type="text" id="bottom-text" placeholder='e.g. "Offer ends soon"'>
-        </div>
-        <div class="form-group">
-            <label for="font-size">Font Size (pt)</label>
-            <input type="number" id="font-size" value="8" min="4" max="24" step="0.5">
+        <div class="layout-form-section">
+            <div class="form-group">
+                <label for="top-text">Top Text <span class="hint">(one line per row)</span></label>
+                <textarea id="top-text" rows="2" placeholder='e.g. "Scan to Win"'></textarea>
+            </div>
+            <div class="form-group">
+                <label for="top-font-size">Top Text Size (pt)</label>
+                <input type="number" id="top-font-size" value="8" min="4" max="24" step="0.5">
+            </div>
+            <div class="form-group">
+                <label for="bottom-text">Bottom Text <span class="hint">(one line per row)</span></label>
+                <textarea id="bottom-text" rows="2" placeholder='e.g. "Offer ends soon"'></textarea>
+            </div>
+            <div class="form-group">
+                <label for="bottom-font-size">Bottom Text Size (pt)</label>
+                <input type="number" id="bottom-font-size" value="8" min="4" max="24" step="0.5">
+            </div>
+            <div class="form-group hidden">
+                <label for="font-size">Font Size (pt)</label>
+                <input type="number" id="font-size" value="8" min="4" max="24" step="0.5">
+            </div>
         </div>
 
         <h4 class="section-title">Visual Aids</h4>

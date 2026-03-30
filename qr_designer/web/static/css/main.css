@@ -385,6 +385,35 @@ input[type="checkbox"] {
     border-radius: 3px;
 }
 
+/* Layout diagram */
+.layout-diagram-wrap {
+    padding: 0 16px 8px;
+}
+
+#layout-diagram {
+    width: 100%;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+/* Text label hints */
+.hint {
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 40px;
+}
+
+.layout-form-section {
+    padding: 0 16px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .designer-layout, .layout-page {

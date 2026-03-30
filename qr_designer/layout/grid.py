@@ -26,10 +26,12 @@ class GridConfig(BaseModel):
     offset_x_mm: float = 0.0
     offset_y_mm: float = 0.0
 
-    # Text labels
+    # Text labels (newline-separated for multi-line)
     top_text: str = ""
     bottom_text: str = ""
     font_size_pt: float = Field(8.0, ge=4.0, le=24.0)
+    top_font_size_pt: float | None = None
+    bottom_font_size_pt: float | None = None
 
     # Visual aids
     show_guides: bool = False

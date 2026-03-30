@@ -55,13 +55,33 @@ def generate_grid_pdf(
     qr_reader = ImageReader(qr_buf)
 
     text_margin = 2 * mm
-    top_text_height = (config.font_size_pt * 1.2) if config.top_text else 0
-    bottom_text_height = (config.font_size_pt * 1.2) if config.bottom_text else 0
+
+    top_font = (
+        config.top_font_size_pt or config.font_size_pt
+    )
+    bottom_font = (
+        config.bottom_font_size_pt or config.font_size_pt
+    )
+
+    top_lines = (
+        [ln for ln in config.top_text.split("\n") if ln.strip()]
+        if config.top_text
+        else []
+    )
+    bottom_lines = (
+        [ln for ln in config.bottom_text.split("\n") if ln.strip()]
+        if config.bottom_text
+        else []
+    )
+
+    top_lh = top_font * 1.3
+    bottom_lh = bottom_font * 1.3
+    top_text_h = top_lh * len(top_lines) if top_lines else 0
+    btm_text_h = bottom_lh * len(bottom_lines) if bottom_lines else 0
 
     for row in range(config.rows):
         for col in range(config.cols):
             x = margin_left + col * (cell_w + h_space)
-            # ReportLab Y starts from bottom
             y = page_h - margin_top - (row + 1) * cell_h - row * v_space
 
             if config.show_borders:
@@ -69,31 +89,38 @@ def generate_grid_pdf(
                 c.setLineWidth(0.5)
                 c.rect(x, y, cell_w, cell_h, stroke=1, fill=0)
 
-            # Calculate QR image area within cell
-            qr_area_top = top_text_height + text_margin if config.top_text else 0
-            qr_area_bottom = bottom_text_height + text_margin if config.bottom_text else 0
+            qr_area_top = (
+                top_text_h + text_margin if top_lines else 0
+            )
+            qr_area_bottom = (
+                btm_text_h + text_margin if bottom_lines else 0
+            )
             available_h = cell_h - qr_area_top - qr_area_bottom
             qr_size = min(cell_w - 2 * text_margin, available_h)
             qr_x = x + (cell_w - qr_size) / 2
             qr_y = y + qr_area_bottom + (available_h - qr_size) / 2
 
-            c.drawImage(qr_reader, qr_x, qr_y, width=qr_size, height=qr_size, mask="auto")
+            c.drawImage(
+                qr_reader, qr_x, qr_y,
+                width=qr_size, height=qr_size,
+                mask="auto",
+            )
 
-            # Top text
-            if config.top_text:
-                c.setFont("Helvetica", config.font_size_pt)
+            if top_lines:
+                c.setFont("Helvetica", top_font)
                 c.setFillColorRGB(0, 0, 0)
-                text_x = x + cell_w / 2
-                text_y = y + cell_h - top_text_height
-                c.drawCentredString(text_x, text_y, config.top_text)
+                tx = x + cell_w / 2
+                for i, line in enumerate(top_lines):
+                    ty = y + cell_h - top_lh * (i + 1)
+                    c.drawCentredString(tx, ty, line)
 
-            # Bottom text
-            if config.bottom_text:
-                c.setFont("Helvetica", config.font_size_pt)
+            if bottom_lines:
+                c.setFont("Helvetica", bottom_font)
                 c.setFillColorRGB(0, 0, 0)
-                text_x = x + cell_w / 2
-                text_y = y + text_margin
-                c.drawCentredString(text_x, text_y, config.bottom_text)
+                tx = x + cell_w / 2
+                for i, line in enumerate(reversed(bottom_lines)):
+                    ty = y + text_margin + bottom_lh * i
+                    c.drawCentredString(tx, ty, line)
 
     # Alignment guides
     if config.show_guides:
