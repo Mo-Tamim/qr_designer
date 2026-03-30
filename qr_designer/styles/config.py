@@ -1,0 +1,58 @@
+"""Central style configuration model."""
+
+from __future__ import annotations
+
+from typing import Optional
+
+from pydantic import BaseModel, Field
+
+from .color import BackgroundSpec, ColorSpec
+
+
+class LogoConfig(BaseModel):
+    image_path: str = ""
+    size_ratio: float = Field(0.2, ge=0.05, le=0.35)
+    padding: int = Field(5, ge=0)
+    frame_shape: str = "none"  # "none", "circle", "square", "rounded"
+    frame_color: str = "#FFFFFF"
+
+
+class QRStyleConfig(BaseModel):
+    # Content
+    content_type: str = "url"
+    content_data: dict = Field(default_factory=lambda: {"url": "https://example.com"})
+
+    # Module styling
+    data_module_shape: str = "square"
+    data_module_color: ColorSpec = Field(default_factory=ColorSpec)
+
+    # Finder pattern styling
+    finder_outer_shape: str = "square"
+    finder_inner_shape: str = "square"
+    finder_outer_color: ColorSpec = Field(default_factory=ColorSpec)
+    finder_inner_color: ColorSpec = Field(default_factory=lambda: ColorSpec(solid="#000000"))
+
+    # Alignment pattern styling
+    alignment_shape: str = "square"
+    alignment_outer_color: ColorSpec = Field(default_factory=ColorSpec)
+    alignment_inner_color: ColorSpec = Field(default_factory=lambda: ColorSpec(solid="#000000"))
+
+    # Background
+    background: BackgroundSpec = Field(default_factory=BackgroundSpec)
+
+    # Logo
+    logo: Optional[LogoConfig] = None
+
+    # QR code outer shape
+    qr_shape: str = "square"  # "square", "rounded", "circle"
+
+    # Error correction
+    error_correction: str = "H"
+
+    # Export settings
+    size_px: int = Field(800, ge=100, le=4096)
+    dpi: int = Field(300, ge=72, le=1200)
+
+    # Finder effects
+    finder_shadow: bool = False
+    finder_3d: bool = False

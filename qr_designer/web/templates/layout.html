@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}QR Designer - Print Layout{% endblock %}
+{% block nav_layout %}active{% endblock %}
+
+{% block content %}
+<div class="layout-page">
+    <aside class="controls-panel">
+        <h3>Print Layout Settings</h3>
+
+        <div class="form-group">
+            <label for="layout-page-size">Page Size</label>
+            <select id="layout-page-size">
+                <option value="a4">A4 (210 x 297 mm)</option>
+                <option value="letter">Letter (216 x 279 mm)</option>
+                <option value="a3">A3 (297 x 420 mm)</option>
+                <option value="legal">Legal (216 x 356 mm)</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+        <div id="custom-page-size" class="hidden">
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="page-width">Width (mm)</label>
+                    <input type="number" id="page-width" value="210" min="50">
+                </div>
+                <div class="form-group half">
+                    <label for="page-height">Height (mm)</label>
+                    <input type="number" id="page-height" value="297" min="50">
+                </div>
+            </div>
+        </div>
+
+        <h4 class="section-title">Grid</h4>
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="grid-rows">Rows</label>
+                <input type="number" id="grid-rows" value="5" min="1" max="20">
+            </div>
+            <div class="form-group half">
+                <label for="grid-cols">Columns</label>
+                <input type="number" id="grid-cols" value="4" min="1" max="20">
+            </div>
+        </div>
+
+        <h4 class="section-title">Cell Size</h4>
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="cell-width">Width (mm)</label>
+                <input type="number" id="cell-width" value="40" min="10" step="0.5">
+            </div>
+            <div class="form-group half">
+                <label for="cell-height">Height (mm)</label>
+                <input type="number" id="cell-height" value="50" min="10" step="0.5">
+            </div>
+        </div>
+
+        <h4 class="section-title">Spacing</h4>
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="h-spacing">Horizontal (mm)</label>
+                <input type="number" id="h-spacing" value="5" min="0" step="0.5">
+            </div>
+            <div class="form-group half">
+                <label for="v-spacing">Vertical (mm)</label>
+                <input type="number" id="v-spacing" value="5" min="0" step="0.5">
+            </div>
+        </div>
+
+        <h4 class="section-title">Margins</h4>
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="margin-top">Top (mm)</label>
+                <input type="number" id="margin-top" value="10" min="0" step="0.5">
+            </div>
+            <div class="form-group half">
+                <label for="margin-bottom">Bottom (mm)</label>
+                <input type="number" id="margin-bottom" value="10" min="0" step="0.5">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="margin-left">Left (mm)</label>
+                <input type="number" id="margin-left" value="10" min="0" step="0.5">
+            </div>
+            <div class="form-group half">
+                <label for="margin-right">Right (mm)</label>
+                <input type="number" id="margin-right" value="10" min="0" step="0.5">
+            </div>
+        </div>
+
+        <h4 class="section-title">Offset Adjustment</h4>
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="offset-x">X Offset (mm)</label>
+                <input type="number" id="offset-x" value="0" step="0.1">
+            </div>
+            <div class="form-group half">
+                <label for="offset-y">Y Offset (mm)</label>
+                <input type="number" id="offset-y" value="0" step="0.1">
+            </div>
+        </div>
+
+        <h4 class="section-title">Text Labels</h4>
+        <div class="form-group">
+            <label for="top-text">Top Text</label>
+            <input type="text" id="top-text" placeholder='e.g. "Scan to Win"'>
+        </div>
+        <div class="form-group">
+            <label for="bottom-text">Bottom Text</label>
+            <input type="text" id="bottom-text" placeholder='e.g. "Offer ends soon"'>
+        </div>
+        <div class="form-group">
+            <label for="font-size">Font Size (pt)</label>
+            <input type="number" id="font-size" value="8" min="4" max="24" step="0.5">
+        </div>
+
+        <h4 class="section-title">Visual Aids</h4>
+        <div class="form-group">
+            <label><input type="checkbox" id="show-guides"> Show Alignment Guides</label>
+        </div>
+        <div class="form-group">
+            <label><input type="checkbox" id="show-borders"> Show Cell Borders</label>
+        </div>
+
+        <button id="layout-preview-btn" class="btn btn-primary btn-block">Preview Layout</button>
+        <button id="layout-export-btn" class="btn btn-success btn-block">Download PDF</button>
+    </aside>
+
+    <section class="preview-panel">
+        <div class="preview-container layout-preview">
+            <iframe id="pdf-preview" class="hidden"></iframe>
+            <div id="layout-placeholder" class="placeholder-msg">
+                Click "Preview Layout" to generate a preview
+            </div>
+            <div id="layout-loading" class="loading hidden">Generating layout...</div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/layout.js"></script>
+{% endblock %}

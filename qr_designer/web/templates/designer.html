@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+{% block title %}QR Designer - Create{% endblock %}
+{% block nav_designer %}active{% endblock %}
+
+{% block content %}
+<div class="designer-layout">
+    <aside class="controls-panel">
+        <div class="tabs">
+            <button class="tab active" data-tab="content">Content</button>
+            <button class="tab" data-tab="style">Style</button>
+            <button class="tab" data-tab="colors">Colors</button>
+            <button class="tab" data-tab="finder">Eyes</button>
+            <button class="tab" data-tab="logo">Logo</button>
+            <button class="tab" data-tab="background">Background</button>
+            <button class="tab" data-tab="export">Export</button>
+        </div>
+
+        <!-- Content Tab -->
+        <div class="tab-panel active" id="tab-content">
+            <div class="form-group">
+                <label for="content-type">Content Type</label>
+                <select id="content-type">
+                    <option value="url">URL</option>
+                    <option value="text">Plain Text</option>
+                    <option value="wifi">Wi-Fi</option>
+                    <option value="vcard">vCard</option>
+                    <option value="calendar">Calendar Event</option>
+                    <option value="payment">Payment Link</option>
+                    <option value="deeplink">App Deep Link</option>
+                </select>
+            </div>
+
+            <div id="content-fields">
+                <div class="content-section" data-type="url">
+                    <div class="form-group">
+                        <label for="url-input">URL</label>
+                        <input type="url" id="url-input" value="https://example.com" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="content-section hidden" data-type="text">
+                    <div class="form-group">
+                        <label for="text-input">Text</label>
+                        <textarea id="text-input" rows="4" placeholder="Enter text..."></textarea>
+                    </div>
+                </div>
+                <div class="content-section hidden" data-type="wifi">
+                    <div class="form-group">
+                        <label for="wifi-ssid">SSID</label>
+                        <input type="text" id="wifi-ssid" placeholder="Network name">
+                    </div>
+                    <div class="form-group">
+                        <label for="wifi-password">Password</label>
+                        <input type="text" id="wifi-password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="wifi-encryption">Encryption</label>
+                        <select id="wifi-encryption">
+                            <option value="WPA">WPA/WPA2</option>
+                            <option value="WEP">WEP</option>
+                            <option value="nopass">None</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="content-section hidden" data-type="vcard">
+                    <div class="form-group">
+                        <label for="vcard-fname">First Name</label>
+                        <input type="text" id="vcard-fname">
+                    </div>
+                    <div class="form-group">
+                        <label for="vcard-lname">Last Name</label>
+                        <input type="text" id="vcard-lname">
+                    </div>
+                    <div class="form-group">
+                        <label for="vcard-phone">Phone</label>
+                        <input type="tel" id="vcard-phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="vcard-email">Email</label>
+                        <input type="email" id="vcard-email">
+                    </div>
+                    <div class="form-group">
+                        <label for="vcard-org">Organization</label>
+                        <input type="text" id="vcard-org">
+                    </div>
+                    <div class="form-group">
+                        <label for="vcard-url">Website</label>
+                        <input type="url" id="vcard-url">
+                    </div>
+                </div>
+                <div class="content-section hidden" data-type="calendar">
+                    <div class="form-group">
+                        <label for="cal-summary">Event Title</label>
+                        <input type="text" id="cal-summary">
+                    </div>
+                    <div class="form-group">
+                        <label for="cal-start">Start</label>
+                        <input type="datetime-local" id="cal-start">
+                    </div>
+                    <div class="form-group">
+                        <label for="cal-end">End</label>
+                        <input type="datetime-local" id="cal-end">
+                    </div>
+                    <div class="form-group">
+                        <label for="cal-location">Location</label>
+                        <input type="text" id="cal-location">
+                    </div>
+                </div>
+                <div class="content-section hidden" data-type="payment">
+                    <div class="form-group">
+                        <label for="payment-url">Payment URL</label>
+                        <input type="url" id="payment-url" placeholder="bitcoin:... or https://...">
+                    </div>
+                </div>
+                <div class="content-section hidden" data-type="deeplink">
+                    <div class="form-group">
+                        <label for="deeplink-url">Deep Link URL</label>
+                        <input type="url" id="deeplink-url" placeholder="myapp://...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="error-correction">Error Correction</label>
+                <select id="error-correction">
+                    <option value="L">L (7%)</option>
+                    <option value="M">M (15%)</option>
+                    <option value="Q">Q (25%)</option>
+                    <option value="H" selected>H (30%)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Style Tab -->
+        <div class="tab-panel" id="tab-style">
+            <div class="form-group">
+                <label>Preset</label>
+                <select id="preset-select">
+                    <option value="">Custom</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="module-shape">Module Shape</label>
+                <select id="module-shape">
+                    <option value="square">Square</option>
+                    <option value="rounded">Rounded</option>
+                    <option value="circle">Circle</option>
+                    <option value="diamond">Diamond</option>
+                    <option value="hexagon">Hexagon</option>
+                    <option value="star">Star</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="qr-shape">QR Code Shape</label>
+                <select id="qr-shape">
+                    <option value="square">Square</option>
+                    <option value="rounded">Rounded Square</option>
+                    <option value="circle">Circle</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Colors Tab -->
+        <div class="tab-panel" id="tab-colors">
+            <div class="form-group">
+                <label for="data-color">Module Color</label>
+                <input type="color" id="data-color" value="#000000">
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="use-gradient"> Use Gradient
+                </label>
+            </div>
+            <div id="gradient-controls" class="hidden">
+                <div class="form-group">
+                    <label for="gradient-type">Gradient Type</label>
+                    <select id="gradient-type">
+                        <option value="linear">Linear</option>
+                        <option value="radial">Radial</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gradient-angle">Angle</label>
+                    <input type="range" id="gradient-angle" min="0" max="360" value="135">
+                    <span id="gradient-angle-val">135°</span>
+                </div>
+                <div class="form-group">
+                    <label for="gradient-color1">Start Color</label>
+                    <input type="color" id="gradient-color1" value="#000000">
+                </div>
+                <div class="form-group">
+                    <label for="gradient-color2">End Color</label>
+                    <input type="color" id="gradient-color2" value="#333333">
+                </div>
+            </div>
+        </div>
+
+        <!-- Finder/Eyes Tab -->
+        <div class="tab-panel" id="tab-finder">
+            <div class="form-group">
+                <label for="finder-outer-shape">Outer Shape</label>
+                <select id="finder-outer-shape">
+                    <option value="square">Square</option>
+                    <option value="rounded">Rounded</option>
+                    <option value="circle">Circle</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="finder-inner-shape">Inner Shape</label>
+                <select id="finder-inner-shape">
+                    <option value="square">Square</option>
+                    <option value="rounded">Rounded</option>
+                    <option value="circle">Circle</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="finder-outer-color">Outer Color</label>
+                <input type="color" id="finder-outer-color" value="#000000">
+            </div>
+            <div class="form-group">
+                <label for="finder-inner-color">Inner Color</label>
+                <input type="color" id="finder-inner-color" value="#000000">
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="finder-shadow"> Shadow Effect
+                </label>
+            </div>
+
+            <h4 class="section-title">Alignment Patterns</h4>
+            <div class="form-group">
+                <label for="alignment-shape">Shape</label>
+                <select id="alignment-shape">
+                    <option value="square">Square</option>
+                    <option value="rounded">Rounded</option>
+                    <option value="circle">Circle</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="alignment-outer-color">Outer Color</label>
+                <input type="color" id="alignment-outer-color" value="#000000">
+            </div>
+            <div class="form-group">
+                <label for="alignment-inner-color">Inner Color</label>
+                <input type="color" id="alignment-inner-color" value="#000000">
+            </div>
+        </div>
+
+        <!-- Logo Tab -->
+        <div class="tab-panel" id="tab-logo">
+            <div class="form-group">
+                <label for="logo-upload">Upload Logo</label>
+                <input type="file" id="logo-upload" accept="image/*">
+            </div>
+            <div id="logo-controls" class="hidden">
+                <div class="form-group">
+                    <label for="logo-size">Size</label>
+                    <input type="range" id="logo-size" min="5" max="35" value="20">
+                    <span id="logo-size-val">20%</span>
+                </div>
+                <div class="form-group">
+                    <label for="logo-padding">Padding</label>
+                    <input type="range" id="logo-padding" min="0" max="20" value="5">
+                    <span id="logo-padding-val">5px</span>
+                </div>
+                <div class="form-group">
+                    <label for="logo-frame">Frame Shape</label>
+                    <select id="logo-frame">
+                        <option value="none">None</option>
+                        <option value="square">Square</option>
+                        <option value="rounded">Rounded</option>
+                        <option value="circle">Circle</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="logo-frame-color">Frame Color</label>
+                    <input type="color" id="logo-frame-color" value="#FFFFFF">
+                </div>
+                <button id="remove-logo" class="btn btn-sm btn-danger">Remove Logo</button>
+            </div>
+        </div>
+
+        <!-- Background Tab -->
+        <div class="tab-panel" id="tab-background">
+            <div class="form-group">
+                <label for="bg-type">Type</label>
+                <select id="bg-type">
+                    <option value="solid">Solid Color</option>
+                    <option value="gradient">Gradient</option>
+                    <option value="transparent">Transparent</option>
+                </select>
+            </div>
+            <div id="bg-solid-controls">
+                <div class="form-group">
+                    <label for="bg-color">Background Color</label>
+                    <input type="color" id="bg-color" value="#FFFFFF">
+                </div>
+            </div>
+            <div id="bg-gradient-controls" class="hidden">
+                <div class="form-group">
+                    <label for="bg-gradient-type">Gradient Type</label>
+                    <select id="bg-gradient-type">
+                        <option value="linear">Linear</option>
+                        <option value="radial">Radial</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="bg-gradient-color1">Start Color</label>
+                    <input type="color" id="bg-gradient-color1" value="#FFFFFF">
+                </div>
+                <div class="form-group">
+                    <label for="bg-gradient-color2">End Color</label>
+                    <input type="color" id="bg-gradient-color2" value="#EEEEEE">
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Tab -->
+        <div class="tab-panel" id="tab-export">
+            <div class="form-group">
+                <label for="export-format">Format</label>
+                <select id="export-format">
+                    <option value="png">PNG</option>
+                    <option value="svg">SVG</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="export-size">Size (px)</label>
+                <input type="number" id="export-size" value="800" min="100" max="4096" step="100">
+            </div>
+            <div class="form-group">
+                <label for="export-dpi">DPI</label>
+                <input type="number" id="export-dpi" value="300" min="72" max="1200" step="1">
+            </div>
+            <button id="export-btn" class="btn btn-primary btn-block">Download QR Code</button>
+        </div>
+    </aside>
+
+    <section class="preview-panel">
+        <div class="preview-container">
+            <img id="qr-preview" src="" alt="QR Preview">
+            <div id="preview-loading" class="loading hidden">Generating...</div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/designer.js"></script>
+{% endblock %}
