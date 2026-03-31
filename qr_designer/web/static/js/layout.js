@@ -292,16 +292,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const drawCols = Math.min(cols, 3);
     const drawRows = Math.min(rows, 3);
 
-    const svgPad = 20;
-    const scaleX = (260 - svgPad * 2) / pw_mm;
-    const scaleY = (340 - svgPad * 2) / ph_mm;
+    const padTop = 18;
+    const padBottom = 50;
+    const padLeft = 22;
+    const padRight = 30;
+    const maxPageW = 220;
+    const maxPageH = 290;
+
+    const scaleX = maxPageW / pw_mm;
+    const scaleY = maxPageH / ph_mm;
     const s = Math.min(scaleX, scaleY);
     const drawW = pw_mm * s;
     const drawH = ph_mm * s;
-    const originX = (260 - drawW) / 2;
-    const originY = (340 - drawH) / 2;
 
-    diagramSvg.setAttribute("viewBox", `0 0 260 340`);
+    const svgW = padLeft + maxPageW + padRight;
+    const svgH = padTop + maxPageH + padBottom;
+    const originX = padLeft + (maxPageW - drawW) / 2;
+    const originY = padTop + (maxPageH - drawH) / 2;
+
+    diagramSvg.setAttribute("viewBox", `0 0 ${svgW} ${svgH}`);
 
     diagramSvg.appendChild(svgEl("rect", {
       x: originX, y: originY, width: drawW, height: drawH,
@@ -312,14 +321,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const cws = cw * s, chs = ch * s, hss = hs * s, vss = vs * s;
     const oxs = ox * s, oys = oy * s;
 
-    // Margin shading
     const marginColor = "rgba(108,114,203,0.10)";
     if (mt > 0) diagramSvg.appendChild(svgEl("rect", { x: originX, y: originY, width: drawW, height: mts, fill: marginColor }));
     if (mb > 0) diagramSvg.appendChild(svgEl("rect", { x: originX, y: originY + drawH - mbs, width: drawW, height: mbs, fill: marginColor }));
     if (ml > 0) diagramSvg.appendChild(svgEl("rect", { x: originX, y: originY + mts, width: mls, height: drawH - mts - mbs, fill: marginColor }));
     if (mr > 0) diagramSvg.appendChild(svgEl("rect", { x: originX + drawW - mrs, y: originY + mts, width: mrs, height: drawH - mts - mbs, fill: marginColor }));
 
-    // Draw cells
     const gridStartX = originX + mls + oxs;
     const gridStartY = originY + mts + oys;
 
@@ -342,128 +349,99 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Ellipsis indicators
     if (cols > 3) {
       const elX = gridStartX + drawCols * (cws + hss) - hss / 2;
       const elY = gridStartY + chs / 2;
       const dots = svgEl("text", { x: elX + 5, y: elY + 2, fill: "#6c72cb", "font-size": "10", "font-family": "sans-serif" });
-      dots.textContent = "...";
+      dots.textContent = "\u2026";
       diagramSvg.appendChild(dots);
     }
     if (rows > 3) {
       const elX = gridStartX + cws / 2;
       const elY = gridStartY + drawRows * (chs + vss) - vss / 2;
       const dots = svgEl("text", { x: elX - 3, y: elY + 5, fill: "#6c72cb", "font-size": "10", "font-family": "sans-serif", "text-anchor": "middle" });
-      dots.textContent = "...";
+      dots.textContent = "\u22ee";
       diagramSvg.appendChild(dots);
     }
 
-    // Dimension arrows
-    const COLORS = {
-      margin: "#ef5350",
-      cell: "#4caf50",
-      spacing: "#ff9800",
-      offset: "#e040fb",
-    };
+    const COLORS = { margin: "#ef5350", cell: "#4caf50", spacing: "#ff9800", offset: "#e040fb" };
 
-    // Top margin
     if (mt > 0) {
       diagramSvg.appendChild(drawDimArrow(
-        originX + drawW + 5, originY, originX + drawW + 5, originY + mts,
-        `${mt}`, COLORS.margin, "right"
+        originX + drawW + 6, originY, originX + drawW + 6, originY + mts,
+        `${mt}mm`, COLORS.margin, "right"
       ));
-      const lbl = svgEl("text", { x: originX + drawW + 15, y: originY + mts / 2 + 3, fill: COLORS.margin, "font-size": "6", "font-family": "sans-serif" });
-      lbl.textContent = "margin-top";
-      diagramSvg.appendChild(lbl);
     }
 
-    // Left margin
     if (ml > 0) {
       diagramSvg.appendChild(drawDimArrow(
-        originX, originY + drawH + 5, originX + mls, originY + drawH + 5,
-        `${ml}`, COLORS.margin, "bottom"
+        originX, originY + drawH + 6, originX + mls, originY + drawH + 6,
+        `${ml}mm`, COLORS.margin, "bottom"
       ));
-      const lbl = svgEl("text", { x: originX + mls / 2, y: originY + drawH + 16, fill: COLORS.margin, "font-size": "6", "font-family": "sans-serif", "text-anchor": "middle" });
-      lbl.textContent = "margin-left";
-      diagramSvg.appendChild(lbl);
     }
 
-    // Cell width
     if (drawCols > 0) {
-      const cy0 = gridStartY;
       diagramSvg.appendChild(drawDimArrow(
-        gridStartX, cy0 - 8, gridStartX + cws, cy0 - 8,
+        gridStartX, gridStartY - 8, gridStartX + cws, gridStartY - 8,
         `${cw}mm`, COLORS.cell, "top"
       ));
     }
 
-    // Cell height
     if (drawRows > 0) {
-      const cx0 = gridStartX;
       diagramSvg.appendChild(drawDimArrow(
-        cx0 - 8, gridStartY, cx0 - 8, gridStartY + chs,
+        gridStartX - 8, gridStartY, gridStartX - 8, gridStartY + chs,
         `${ch}mm`, COLORS.cell, "left"
       ));
     }
 
-    // Horizontal spacing
     if (drawCols > 1 && hs > 0) {
       const sy = gridStartY + chs + 4;
       const sx1 = gridStartX + cws;
       const sx2 = sx1 + hss;
-      diagramSvg.appendChild(drawDimArrow(sx1, sy, sx2, sy, `${hs}`, COLORS.spacing, "bottom"));
-      // Shade the gap
+      diagramSvg.appendChild(drawDimArrow(sx1, sy, sx2, sy, `${hs}mm`, COLORS.spacing, "bottom"));
       diagramSvg.appendChild(svgEl("rect", {
         x: sx1, y: gridStartY, width: hss, height: chs,
         fill: "rgba(255,152,0,0.10)", stroke: "none",
       }));
     }
 
-    // Vertical spacing
     if (drawRows > 1 && vs > 0) {
       const sx = gridStartX + cws + 4;
       const sy1 = gridStartY + chs;
       const sy2 = sy1 + vss;
-      diagramSvg.appendChild(drawDimArrow(sx, sy1, sx, sy2, `${vs}`, COLORS.spacing, "right"));
+      diagramSvg.appendChild(drawDimArrow(sx, sy1, sx, sy2, `${vs}mm`, COLORS.spacing, "right"));
       diagramSvg.appendChild(svgEl("rect", {
         x: gridStartX, y: sy1, width: cws, height: vss,
         fill: "rgba(255,152,0,0.10)", stroke: "none",
       }));
     }
 
-    // Offset X
     if (ox !== 0) {
       const ocy = gridStartY + chs / 2;
       const baseX = originX + mls;
-      diagramSvg.appendChild(drawDimArrow(
-        baseX, ocy, baseX + oxs, ocy,
-        `x:${ox}`, COLORS.offset, "top"
-      ));
+      diagramSvg.appendChild(drawDimArrow(baseX, ocy, baseX + oxs, ocy, `${ox}mm`, COLORS.offset, "top"));
     }
 
-    // Offset Y
     if (oy !== 0) {
       const ocx = gridStartX + cws / 2;
       const baseY = originY + mts;
-      diagramSvg.appendChild(drawDimArrow(
-        ocx, baseY, ocx, baseY + oys,
-        `y:${oy}`, COLORS.offset, "left"
-      ));
+      diagramSvg.appendChild(drawDimArrow(ocx, baseY, ocx, baseY + oys, `${oy}mm`, COLORS.offset, "left"));
     }
 
-    // Legend
-    const legendY = originY + drawH + 24;
+    const legendY = originY + drawH + 28;
     const legendItems = [
       { color: COLORS.margin, label: "Margins" },
       { color: COLORS.cell, label: "Cell size" },
       { color: COLORS.spacing, label: "Spacing" },
       { color: COLORS.offset, label: "Offset" },
     ];
-    const legendStartX = originX;
+    const itemW = 52;
+    const totalLegendW = legendItems.length * itemW;
+    const legendStartX = originX + (drawW - totalLegendW) / 2;
     legendItems.forEach((item, i) => {
-      const lx = legendStartX + i * 58;
-      diagramSvg.appendChild(svgEl("rect", { x: lx, y: legendY, width: 8, height: 8, fill: item.color, rx: "1" }));
-      const t = svgEl("text", { x: lx + 11, y: legendY + 7, fill: "#9598a6", "font-size": "7", "font-family": "sans-serif" });
+      const lx = legendStartX + i * itemW;
+      diagramSvg.appendChild(svgEl("rect", { x: lx, y: legendY, width: 9, height: 9, fill: item.color, rx: "1" }));
+      const t = svgEl("text", { x: lx + 12, y: legendY + 8, fill: "#9598a6", "font-size": "8", "font-family": "sans-serif" });
       t.textContent = item.label;
       diagramSvg.appendChild(t);
     });
