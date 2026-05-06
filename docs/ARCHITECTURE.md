@@ -846,7 +846,7 @@ This approach ensures all modules are rendered correctly before masking, and the
 
 ## API Reference
 
-All endpoints are under the FastAPI app at `http://localhost:8000`. Interactive documentation is auto-generated at `/docs` (Swagger UI) and `/redoc`.
+All endpoints are under the FastAPI app at `http://localhost:8011`. Interactive documentation is auto-generated at `/docs` (Swagger UI) and `/redoc`.
 
 | Method | Path | Request Body | Response | Description |
 |---|---|---|---|---|

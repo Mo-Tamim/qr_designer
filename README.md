@@ -18,14 +18,14 @@ pip install -r requirements.txt
 python run.py
 ```
 
-Open http://localhost:8000 in your browser.
+Open http://localhost:8011 in your browser.
 
 ## API Documentation
 
 FastAPI auto-generates interactive API docs:
 
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+- Swagger UI: http://localhost:8011/docs
+- ReDoc: http://localhost:8011/redoc
 
 ## Project Structure
 

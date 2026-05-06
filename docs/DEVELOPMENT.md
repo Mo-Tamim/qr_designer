@@ -29,14 +29,14 @@ pip install -r requirements.txt
 python run.py
 ```
 
-This starts a uvicorn development server with hot-reload at `http://0.0.0.0:8000`.
+This starts a uvicorn development server with hot-reload at `http://0.0.0.0:8011`.
 
 | URL | Description |
 |---|---|
-| `http://localhost:8000/` | QR Designer page |
-| `http://localhost:8000/layout` | Print layout page |
-| `http://localhost:8000/docs` | Swagger UI (interactive API docs) |
-| `http://localhost:8000/redoc` | ReDoc (alternative API docs) |
+| `http://localhost:8011/` | QR Designer page |
+| `http://localhost:8011/layout` | Print layout page |
+| `http://localhost:8011/docs` | Swagger UI (interactive API docs) |
+| `http://localhost:8011/redoc` | ReDoc (alternative API docs) |
 
 ---
 
